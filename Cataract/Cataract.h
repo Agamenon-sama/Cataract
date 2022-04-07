@@ -1,7 +1,9 @@
 #pragma once
 
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <unistd.h>
 
 #include <slog/slog.h>
@@ -12,12 +14,18 @@
 namespace Cataract {
     class IPAddress {
         public:
+        IPAddress();
         IPAddress(std::string addr, sa_family_t addrType = AF_INET);
 
-        sa_family_t getAddrType() const { return _addrType; }
+        sa_family_t getAddrType() const { return _addrHints.ai_family; }
+        std::string getAddr() const { return _addr; }
+        struct addrinfo getHints() const { return _addrHints; }
+
+        void setAddr(std::string addr, sa_family_t addrType = AF_INET);
 
         private:
-        sa_family_t _addrType;
+        // sa_family_t _addrType;
+        struct addrinfo _addrHints;
         std::string _addr;
     };
 
@@ -26,8 +34,8 @@ namespace Cataract {
         TcpScanner();
         ~TcpScanner();
 
-        bool singleScan(IPAddress addr, uint16_t port) const;
-        std::vector<std::pair<uint16_t, bool>> portSwip(IPAddress addr, std::vector<uint16_t> ports) const;
+        bool singleScan(const IPAddress addr, const uint16_t port) const;
+        std::vector<std::pair<uint16_t, bool>> portSwip(const IPAddress addr, const std::vector<uint16_t> ports) const;
         
         private:
         int _socket;
