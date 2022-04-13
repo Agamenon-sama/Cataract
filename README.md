@@ -20,6 +20,22 @@ make clean
 make
 ```
 
+## Usage
+
+```
+cataract ports <ports> host <hostname>
+```
+
+ports ranges are set with hyphens (-) and you can set multiple seperated port numbers with commas (,)
+
+example :
+
+```
+cataract ports 20-50,80 host <hostname>
+```
+
+hostname can be a domain name or an ipv4 address in dot-decimal notation
+
 ## License
 
 MIT License

@@ -8,7 +8,7 @@
 
 #include <slog/slog.h>
 
-static std::vector<std::string> parseLine(const std::string &line, const char sep=';') {
+static std::vector<std::string> splitLine(const std::string &line, const char sep=';') {
     /** Takes a string, splits it into the strings separated by sep
      * and return a vector with of the resulting strings
      */
@@ -31,8 +31,8 @@ static std::vector<std::string> parseLine(const std::string &line, const char se
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        slog::error("Usage example : cataract ports 45-78,5,8");
+    if (argc < 5) {
+        slog::error("Usage example : cataract ports 45-78,5,8 host localhost");
         return 1;
     }
 
@@ -49,12 +49,12 @@ int main(int argc, char *argv[]) {
             if (argCount >= argc) {
                 slog::error("Argument missing");
             }
-            auto commaSeparated = parseLine(argv[argCount], ',');
+            auto commaSeparated = splitLine(argv[argCount], ',');
             
 
             for (auto strRange : commaSeparated) {
                 // get limits of range
-                auto tempRange = parseLine(strRange, '-');
+                auto tempRange = splitLine(strRange, '-');
                 // turn range to std::pair
                 std::pair<uint16_t, uint16_t> range;
 
@@ -85,9 +85,9 @@ int main(int argc, char *argv[]) {
             addr.setAddr(argv[argCount]);
         }
         else {
-            std::string temp = "Invalid argument ";
-            temp += argv[argCount];
-            slog::warning(temp);
+            std::string warningMessage = "Invalid argument ";
+            warningMessage += argv[argCount];
+            slog::warning(warningMessage);
         }
         
     }

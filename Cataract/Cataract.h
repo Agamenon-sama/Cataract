@@ -37,7 +37,5 @@ namespace Cataract {
         bool singleScan(const IPAddress addr, const uint16_t port) const;
         std::vector<std::pair<uint16_t, bool>> portSwip(const IPAddress addr, const std::vector<uint16_t> ports) const;
         
-        private:
-        int _socket;
     };
 }

@@ -5,16 +5,8 @@
 
 #include <string.h>
 
-Cataract::TcpScanner::TcpScanner() {
-    _socket = socket(AF_INET, SOCK_STREAM, 0);
-    if(_socket == -1) {
-        slog::error("Failed to open socket for TcpScanner");
-    }
-}
-
-Cataract::TcpScanner::~TcpScanner() {
-    close(_socket);
-}
+Cataract::TcpScanner::TcpScanner() {}
+Cataract::TcpScanner::~TcpScanner() {}
 
 bool Cataract::TcpScanner::singleScan(const IPAddress addr, const uint16_t port) const {
     // Making address
@@ -24,19 +16,22 @@ bool Cataract::TcpScanner::singleScan(const IPAddress addr, const uint16_t port)
         return false;
     }
 
-    // struct sockaddr_in sAddr;
-    // sAddr.sin_family = addr.getAddrType();
-    // sAddr.sin_port = htons(port);
-    // sAddr.sin_addr.s_addr = INADDR_ANY;
-    // sAddr.sin_addr.s_addr = inet_addr("107.161.19.243"); // 107.161.19.243 = lainchan.org
+    // Making socket
+    int sock = socket(addr.getHints().ai_family, SOCK_STREAM, 0);
+    if(sock == -1) {
+        slog::error("Failed to open socket for TcpScanner");
+        return false;
+    }
 
     // Connecting
     // Here I am assuming only 1 address is returned
-    int ret = connect(_socket, addrsFound->ai_addr, addrsFound->ai_addrlen);
+    int ret = connect(sock, addrsFound->ai_addr, addrsFound->ai_addrlen);
     freeaddrinfo(addrsFound);
     if(!ret) {
+        close(sock);
         return true; // port open
     } else {
+        close(sock);
         return false; // port closed
     }
 }
