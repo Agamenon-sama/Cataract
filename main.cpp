@@ -60,13 +60,15 @@ int main(int argc, char *argv[]) {
                 // turn range to std::pair
                 std::pair<uint16_t, uint16_t> range;
 
-                // TODO: handle invalid inputs like
-                // - non numbers
-                // - invalid numbers
-                // - first limit larger than second limit (preferably swap)
                 if (tempRange.size() == 1) {
                     // if it's a single port number we set the other limit to 0
-                    range = {std::stoi(tempRange[0]), 0};
+                    try {
+                        range = {std::stoi(tempRange[0]), 0};
+                    }
+                    catch(std::exception &e) {
+                        slog::error("Invalid port number");
+                        return 2;
+                    }
                 } else {
                     // if it's a range we set the limits to the given numbers
                     if (tempRange.size() > 2) {
@@ -74,7 +76,13 @@ int main(int argc, char *argv[]) {
                             "Port ranges should look like : x-y\n"
                             "only the first and second ranges will be considered");
                     }
-                    range = {std::stoi(tempRange[0]), std::stoi(tempRange[1])};
+                    try {
+                        range = {std::stoi(tempRange[0]), std::stoi(tempRange[1])};
+                    }
+                    catch(std::exception &e) {
+                        slog::error("Invalid port number");
+                        return 2;
+                    }
                 }
                 ranges.push_back(range);
             }
@@ -113,6 +121,10 @@ int main(int argc, char *argv[]) {
             ports.push_back(range.first);
         }
         else {
+            if (range.first > range.second) {
+                slog::warning("the port ranges are in the wrong sense");
+                std::swap(range.first, range.second);
+            }
             // else we fill all the ports in the range
             for(int i = range.first; i <= range.second; i++) {
                 ports.push_back(i);
