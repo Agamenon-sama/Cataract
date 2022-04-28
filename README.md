@@ -13,28 +13,26 @@ cd build
 make
 ```
 
-I currently have a problem where make doesn't recompile modified files. This will be fixed but until then, every time you want to recompile, you have to use
-
-```
-make clean
-make
-```
-
 ## Usage
 
 ```
 cataract ports <ports> host <hostname>
+cataract ports <ports> host6 <hostname>
 ```
 
 ports ranges are set with hyphens (-) and you can set multiple seperated port numbers with commas (,)
 
-example :
+host specify the ipv4 hostname
+
+host6 specify the ipv6 hostname
+
+### example :
 
 ```
 cataract ports 20-50,80 host <hostname>
 ```
 
-hostname can be a domain name or an ipv4 address in dot-decimal notation
+hostname can be a domain name, an ipv4 address in dot-decimal notation or an ipv6 address in colon hexadecimal notation
 
 ## License
 

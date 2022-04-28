@@ -31,8 +31,10 @@ static std::vector<std::string> splitLine(const std::string &line, const char se
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 5) {
-        slog::error("Usage example : cataract ports 45-78,5,8 host localhost");
+    if (argc != 5) {
+        slog::error("Invalid arguments");
+        slog::info("Usage example : cataract ports 45-78,5,8 host localhost");
+        slog::info("Usage example : cataract ports 45-78,5,8 host6 ::1");
         return 1;
     }
 
@@ -80,9 +82,18 @@ int main(int argc, char *argv[]) {
         else if (std::string(argv[argCount]) == "host") {
             argCount++;
             if (argCount >= argc) {
-                slog::error("Argument missing");
+                slog::error("Argument missing after \"host\"");
+                return 1;
             }
             addr.setAddr(argv[argCount]);
+        }
+        else if (std::string(argv[argCount]) == "host6") {
+            argCount++;
+            if (argCount >= argc) {
+                slog::error("Argument missing after \"host6\"");
+                return 1;
+            }
+            addr.setAddr(argv[argCount], AF_INET6);
         }
         else {
             std::string warningMessage = "Invalid argument ";
@@ -109,7 +120,7 @@ int main(int argc, char *argv[]) {
         }
     }
     // We scan and print the results
-    auto scanResult = scanner.portSwip(addr, ports);
+    auto scanResult = scanner.portSweep(addr, ports);
     for(auto test : scanResult) {
         if(test.second) { // second holds the test result
             std::cout << "Port " << test.first << "/tcp is \e[32mopen\e[0m\n";

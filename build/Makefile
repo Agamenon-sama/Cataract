@@ -6,19 +6,18 @@ CXX_FLAGS := -Wall -Wextra -g
 LINK_FLAGS :=
 
 INC := "../include"
-# INC := "/home/agamenon/Documents/C Projects/portScanner/include"
 OBJS := main.o Cataract.o
 
-all: output
+all: $(APP)
 
-output: $(OBJS)
-	$(CXX) $(OBJS) -o $(APP) $(CXX_FLAGS) $(LINK_FLAGS) -I$(INC)
+$(APP): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(CXX_FLAGS) $(LINK_FLAGS) -I$(INC)
 
-main.o:
-	$(CXX) ../main.cpp -c $(CXX_FLAGS) $(LINK_FLAGS) -I$(INC)
+main.o: ../main.cpp
+	$(CXX) $^ -c $(CXX_FLAGS) $(LINK_FLAGS) -I$(INC)
 
-Cataract.o:
-	$(CXX) ../Cataract/Cataract.cpp -c $(CXX_FLAGS) $(LINK_FLAGS) -I$(INC)
+Cataract.o: ../Cataract/Cataract.cpp
+	$(CXX) $^ -c $(CXX_FLAGS) $(LINK_FLAGS) -I$(INC)
 
 clean:
 	rm *.o $(APP)

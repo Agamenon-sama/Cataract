@@ -36,7 +36,7 @@ bool Cataract::TcpScanner::singleScan(const IPAddress addr, const uint16_t port)
     }
 }
 
-std::vector<std::pair<uint16_t, bool>> Cataract::TcpScanner::portSwip(const IPAddress addr, const std::vector<uint16_t> ports) const {
+std::vector<std::pair<uint16_t, bool>> Cataract::TcpScanner::portSweep(const IPAddress addr, const std::vector<uint16_t> ports) const {
     std::vector<std::pair<uint16_t, bool>> result;
     
     for(uint16_t port : ports) {
