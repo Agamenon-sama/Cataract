@@ -6,8 +6,6 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include <slog/slog.h>
-
 #include <string>
 #include <vector>
 

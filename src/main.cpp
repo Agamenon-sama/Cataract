@@ -1,3 +1,4 @@
+#define SLOG_IMPLEMENTATION
 #include <iostream>
 
 #include <sys/socket.h>
@@ -7,6 +8,9 @@
 #include "Cataract/Cataract.h"
 
 #include <slog/slog.h>
+
+#include <QApplication>
+#include "gui/mainwindow.h"
 
 static std::vector<std::string> splitLine(const std::string &line, const char sep=';') {
     /** Takes a string, splits it into the strings separated by sep
@@ -31,6 +35,13 @@ static std::vector<std::string> splitLine(const std::string &line, const char se
 }
 
 int main(int argc, char *argv[]) {
+    if (argc == 1) {
+        QApplication app(argc, argv);
+        MainWindow window;
+        window.show();
+        return app.exec();
+    }
+
     if (argc != 5) {
         slog::error("Invalid arguments");
         slog::info("Usage example : cataract ports 45-78,5,8 host localhost");

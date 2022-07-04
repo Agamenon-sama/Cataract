@@ -1,6 +1,3 @@
-#define SLOG_IMPLEMENTATION
-#include <slog/slog.h>
-
 #include "Cataract.h"
 
 #include <string.h>
@@ -19,7 +16,6 @@ bool Cataract::TcpScanner::singleScan(const IPAddress addr, const uint16_t port)
     // Making socket
     int sock = socket(addr.getHints().ai_family, SOCK_STREAM, 0);
     if(sock == -1) {
-        slog::error("Failed to open socket for TcpScanner");
         return false;
     }
 
