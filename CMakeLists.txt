@@ -22,7 +22,10 @@ set(PROJECT_SOURCES
         src/gui/mainwindow.cpp
         src/gui/mainwindow.h
         src/gui/mainwindow.ui
-        src/Cataract/Cataract.cpp
+        src/Cataract/core.h
+        src/Cataract/core.cpp
+        src/Cataract/tcpScanner.h
+        src/Cataract/tcpScanner.cpp
         src/Cataract/Cataract.h
 )
 
