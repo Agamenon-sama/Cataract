@@ -4,16 +4,16 @@ A port scanner for Linux
 
 ## Dependencies
 
-For now, nothing except the C++ standard library
+- Posix sockets
+- Qt framework (mainly QtCore and QtWidget)
 
 ## Build
 
-```
-cd build
-make
-```
+You want Qt Creator. Use Qt Creator to open the CMakeLists.txt file and build the project.
 
 ## Usage
+
+### CLI
 
 ```
 cataract ports <ports> host <hostname>
@@ -25,6 +25,16 @@ ports ranges are set with hyphens (-) and you can set multiple seperated port nu
 host specify the ipv4 hostname
 
 host6 specify the ipv6 hostname
+
+### GUI
+
+You can either just
+
+```
+cataract
+```
+
+Or double-click the executable
 
 ### example :
 
