@@ -17,10 +17,13 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="5">
+      <item row="0" column="1" colspan="3">
+       <widget class="QLineEdit" name="lineHost"/>
+      </item>
+      <item row="0" column="4">
        <widget class="QCheckBox" name="chkIpv6">
         <property name="text">
-         <string>CheckBox</string>
+         <string>ipv6</string>
         </property>
        </widget>
       </item>
@@ -30,33 +33,6 @@
          <string>ports/hosts:</string>
         </property>
        </widget>
-      </item>
-      <item row="2" column="1" colspan="3">
-       <widget class="QLineEdit" name="linePorts"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblHost">
-        <property name="text">
-         <string>host:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QLabel" name="lblIpv6">
-        <property name="text">
-         <string>ipv6:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblScanType">
-        <property name="text">
-         <string>Scan type:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="3">
-       <widget class="QLineEdit" name="lineHost"/>
       </item>
       <item row="1" column="1" colspan="3">
        <widget class="QComboBox" name="cmbScanType">
@@ -70,6 +46,23 @@
           <string>SYN TCP</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="3">
+       <widget class="QLineEdit" name="linePorts"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblHost">
+        <property name="text">
+         <string>host:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblScanType">
+        <property name="text">
+         <string>Scan type:</string>
+        </property>
        </widget>
       </item>
      </layout>

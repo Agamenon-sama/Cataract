@@ -25,10 +25,13 @@ std::vector<std::string> splitLine(const std::string &line, const char sep) {
 }
 
 bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
+    /**
+     *  Takes the ports string and returns a vector of all the ports to scan
+     */
+    
     // ==================
     // determining ranges
     // ==================
-
     // holds the limits of the port ranges
     std::vector<std::pair<uint16_t, uint16_t>> ranges;
 
@@ -44,7 +47,7 @@ bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
         if (tempRange.size() == 1) {
             // if it's a single port number we set the other limit to 0
             try {
-                range = {std::stoi(tempRange[0]), 0};
+                range = {std::stoi(tempRange[0]), std::stoi(tempRange[0])};
             }
             catch(std::exception &e) {
                 slog::error("Invalid port number");
@@ -73,7 +76,7 @@ bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
     // use ranges to get a vector of ports
     // ==================
     for(auto range : ranges) {
-        if(range.second == 0) {
+        /* if(range.second == 0) {
             // if it's a single port we push it as it is
             ports.push_back(range.first);
         }
@@ -86,6 +89,14 @@ bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
             for(int i = range.first; i <= range.second; i++) {
                 ports.push_back(i);
             }
+        } */
+        if (range.first > range.second) {
+            slog::warning("the port ranges are in the wrong sense");
+            std::swap(range.first, range.second);
+        }
+        // else we fill all the ports in the range
+        for(int i = range.first; i <= range.second; i++) {
+            ports.push_back(i);
         }
     }
 

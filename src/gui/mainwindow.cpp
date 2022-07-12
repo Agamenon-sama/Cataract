@@ -32,7 +32,9 @@ void MainWindow::on_btnScan_clicked()
         QMessageBox::critical(this, "no hostname", "No hostname was entered");
         return;
     }
-    Cataract::IPAddress addr(hostname);
+    sa_family_t addrType = AF_INET;
+    if (ui->chkIpv6->isChecked()) addrType = AF_INET6;
+    Cataract::IPAddress addr(hostname, addrType);
 
     // get ports
     std::string portsStr = ui->linePorts->text().toStdString();
@@ -51,8 +53,7 @@ void MainWindow::on_btnScan_clicked()
     Cataract::TcpScanner scanner;
 
     auto results = scanner.portSweep(addr, ports);
-    // auto result = scanner.singleScan(addr, std::stoi(port));
-    for (auto result : results) {
+    for (const auto& result : results) {
         if (result.isOpen()) {
             ui->txtOutput->append(QString("The port %1/tcp is <font color=\"green\">open</font>").arg(result.getPort()));
         }
