@@ -7,32 +7,12 @@
 
 #include "Cataract/Cataract.h"
 
+#include "utils.h"
+
 #include <slog/slog.h>
 
 #include <QApplication>
 #include "gui/mainwindow.h"
-
-static std::vector<std::string> splitLine(const std::string &line, const char sep=';') {
-    /** Takes a string, splits it into the strings separated by sep
-     * and return a vector with of the resulting strings
-     */
-    std::vector<std::string> returnValue;
-    std::string temp;
-
-    for(size_t i = 0; i < line.size(); i++) {
-        if(line[i] != sep) {
-            temp.push_back(line[i]);
-        } else {
-            if(!temp.empty()) {
-                returnValue.push_back(temp);
-                temp = "";
-            }
-        }
-    }
-    returnValue.push_back(temp);
-
-    return returnValue;
-}
 
 int main(int argc, char *argv[]) {
     if (argc == 1) {
@@ -49,10 +29,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // holds the limits of the port ranges
-    std::vector<std::pair<uint16_t, uint16_t>> ranges;
     // holds address of the host to be scanned
     Cataract::IPAddress addr;
+    // holds ports
+    std::vector<uint16_t> ports;
 
     // Argument parsing phase
     for (int argCount = 1; argCount < argc; argCount++) {
@@ -61,8 +41,14 @@ int main(int argc, char *argv[]) {
             argCount++;
             if (argCount >= argc) {
                 slog::error("Argument missing");
+                return 1;
             }
-            auto commaSeparated = splitLine(argv[argCount], ',');
+
+            if(!argToPorts(argv[argCount], ports)) {
+                slog::error("The ports ranges you inputed are invalid");
+                return 2;
+            }
+            /* auto commaSeparated = splitLine(argv[argCount], ',');
             
 
             for (auto strRange : commaSeparated) {
@@ -96,7 +82,7 @@ int main(int argc, char *argv[]) {
                     }
                 }
                 ranges.push_back(range);
-            }
+            }*/
         }
         else if (std::string(argv[argCount]) == "host") {
             argCount++;
@@ -125,8 +111,7 @@ int main(int argc, char *argv[]) {
     // Scanning phase
     Cataract::TcpScanner scanner;
     
-    std::vector<uint16_t> ports;
-    for(auto range : ranges) {
+    /* for(auto range : ranges) {
         if(range.second == 0) {
             // if it's a single port we push it as it is
             ports.push_back(range.first);
@@ -141,14 +126,14 @@ int main(int argc, char *argv[]) {
                 ports.push_back(i);
             }
         }
-    }
+    } */
     // We scan and print the results
     auto scanResult = scanner.portSweep(addr, ports);
     for(auto test : scanResult) {
-        if(test.second) { // second holds the test result
-            std::cout << "Port " << test.first << "/tcp is \e[32mopen\e[0m\n";
+        if(test.isOpen()) { // second holds the test result
+            std::cout << "Port " << test.getPort() << "/tcp is \e[32mopen\e[0m\n";
         } else {
-            std::cout << "Port " << test.first << "/tcp is \e[31mclosed\e[0m\n";
+            std::cout << "Port " << test.getPort() << "/tcp is \e[31mclosed\e[0m\n";
         }
     }
 

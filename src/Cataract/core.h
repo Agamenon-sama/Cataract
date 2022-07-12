@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include <string>
+#include <vector>
 
 namespace Cataract {
     class IPAddress {
@@ -24,5 +25,25 @@ namespace Cataract {
         // sa_family_t _addrType;
         struct addrinfo _addrHints;
         std::string _addr;
+    };
+
+    enum class ScanStatus {
+        Open = 0, Closed, SocketFailed, AddressNotFound
+    };
+
+    class ScanResult {
+        public:
+        ScanResult();
+        ScanResult(const IPAddress addr, const uint16_t port, const ScanStatus status);
+
+        ScanStatus getStatus() const { return _status; }
+        uint16_t getPort() const { return _port; }
+        IPAddress getAddress() const { return _addr; }
+        bool isOpen() const { return !(bool)_status; }
+
+        private:
+        IPAddress _addr;
+        uint16_t _port;
+        ScanStatus _status;
     };
 }

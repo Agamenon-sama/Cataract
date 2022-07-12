@@ -2,8 +2,11 @@
 #include "./ui_mainwindow.h"
 
 #include <QMessageBox>
+#include <QDateTime>
 
 #include "../Cataract/Cataract.h"
+
+#include "../utils.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setCentralWidget(ui->centralwidget);
-    setWindowTitle("Learn");
+    setWindowTitle("Cataract");
     setStyleSheet("QLabel {}");
 }
 
@@ -23,6 +26,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::on_btnScan_clicked()
 {
+    // get hostname
     std::string hostname = ui->lineHost->text().toStdString();
     if (hostname == "") {
         QMessageBox::critical(this, "no hostname", "No hostname was entered");
@@ -30,18 +34,33 @@ void MainWindow::on_btnScan_clicked()
     }
     Cataract::IPAddress addr(hostname);
 
-    std::string port = ui->linePorts->text().toStdString();
-    if (port == "") {
+    // get ports
+    std::string portsStr = ui->linePorts->text().toStdString();
+    if (portsStr == "") {
         QMessageBox::critical(this, "no port", "No port was entered");
         return;
     }
+    std::vector<uint16_t> ports;
+    if(!argToPorts(portsStr, ports)) {
+        QMessageBox::critical(this, "invalid ports", "The ports ranges you inputed are invalid");
+        return;
+    }
 
+    // scanning
+    ui->txtOutput->append(QString("The scan started at <font color=\"blue\">%1</font>").arg(QDateTime::currentDateTimeUtc().toString()));
     Cataract::TcpScanner scanner;
-    if (scanner.singleScan(addr, std::stoi(port))) {
-        QMessageBox::information(this, "scan result", "The port is open");
+
+    auto results = scanner.portSweep(addr, ports);
+    // auto result = scanner.singleScan(addr, std::stoi(port));
+    for (auto result : results) {
+        if (result.isOpen()) {
+            ui->txtOutput->append(QString("The port %1/tcp is <font color=\"green\">open</font>").arg(result.getPort()));
+        }
+        else {
+            ui->txtOutput->append(QString("The port %1/tcp is <font color=\"red\">closed</font>").arg(result.getPort()));
+        }
     }
-    else {
-        QMessageBox::information(this, "scan result", "The port is closed");
-    }
+
+    ui->txtOutput->append("<font color=\"grey\">--------------------------</font>");
 }
 

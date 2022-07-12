@@ -19,6 +19,8 @@ include_directories("${CMAKE_SOURCE_DIR}/include")
 
 set(PROJECT_SOURCES
         src/main.cpp
+        src/utils.cpp
+        src/utils.h
         src/gui/mainwindow.cpp
         src/gui/mainwindow.h
         src/gui/mainwindow.ui
