@@ -22,6 +22,8 @@ cataract ports <ports> host6 <hostname>
 
 ports ranges are set with hyphens (-) and you can set multiple seperated port numbers with commas (,)
 
+in case of single port (not a range), instead of a port number, you can use a service name like http (80) or ssh (22)
+
 host specify the ipv4 hostname
 
 host6 specify the ipv6 hostname
@@ -39,7 +41,7 @@ Or double-click the executable
 ### example :
 
 ```
-cataract ports 20-50,80 host <hostname>
+cataract ports 20-50,80,https host <hostname>
 ```
 
 hostname can be a domain name, an ipv4 address in dot-decimal notation or an ipv6 address in colon hexadecimal notation

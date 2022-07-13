@@ -1,5 +1,7 @@
 #include "utils.h"
 
+#include "Cataract/core.h"
+
 #include <slog/slog.h>
 
 std::vector<std::string> splitLine(const std::string &line, const char sep) {
@@ -46,12 +48,19 @@ bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
 
         if (tempRange.size() == 1) {
             // if it's a single port number we set the other limit to 0
+            std::string portStr = tempRange[0];
             try {
                 range = {std::stoi(tempRange[0]), std::stoi(tempRange[0])};
             }
             catch(std::exception &e) {
-                slog::error("Invalid port number");
-                return false;
+                uint16_t port = htons(Cataract::servToPort(portStr));
+                if (port != 0) {
+                    range = {port, port};
+                }
+                else {
+                    slog::error("Invalid port number");
+                    return false;
+                }
             }
         } else {
             // if it's a range we set the limits to the given numbers
@@ -59,7 +68,6 @@ bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
                 slog::warning("There is an invalid range\n"
                     "Port ranges should look like : x-y\n"
                     "only the first and second ranges will be considered");
-                return false;
             }
             try {
                 range = {std::stoi(tempRange[0]), std::stoi(tempRange[1])};
@@ -76,20 +84,6 @@ bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
     // use ranges to get a vector of ports
     // ==================
     for(auto range : ranges) {
-        /* if(range.second == 0) {
-            // if it's a single port we push it as it is
-            ports.push_back(range.first);
-        }
-        else {
-            if (range.first > range.second) {
-                slog::warning("the port ranges are in the wrong sense");
-                std::swap(range.first, range.second);
-            }
-            // else we fill all the ports in the range
-            for(int i = range.first; i <= range.second; i++) {
-                ports.push_back(i);
-            }
-        } */
         if (range.first > range.second) {
             slog::warning("the port ranges are in the wrong sense");
             std::swap(range.first, range.second);

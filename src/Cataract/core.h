@@ -17,14 +17,17 @@ namespace Cataract {
 
         sa_family_t getAddrType() const { return _addrHints.ai_family; }
         std::string getAddr() const { return _addr; }
+        std::string getIp() const { return _ip; }
         struct addrinfo getHints() const { return _addrHints; }
 
         void setAddr(std::string addr, sa_family_t addrType = AF_INET);
 
         private:
-        // sa_family_t _addrType;
         struct addrinfo _addrHints;
         std::string _addr;
+        std::string _ip;
+
+        void _resolveName();
     };
 
     enum class ScanStatus {
@@ -46,4 +49,6 @@ namespace Cataract {
         uint16_t _port;
         ScanStatus _status;
     };
+
+    uint16_t servToPort(std::string service);
 }

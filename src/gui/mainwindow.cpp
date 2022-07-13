@@ -50,6 +50,7 @@ void MainWindow::on_btnScan_clicked()
 
     // scanning
     ui->txtOutput->append(QString("The scan started at <font color=\"blue\">%1</font>").arg(QDateTime::currentDateTimeUtc().toString()));
+    ui->txtOutput->append(QString("Scanning %1 (%2)").arg(addr.getAddr().c_str(), addr.getIp().c_str()));
     Cataract::TcpScanner scanner;
 
     auto results = scanner.portSweep(addr, ports);
