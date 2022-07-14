@@ -3,6 +3,7 @@
 
 #include <QMessageBox>
 #include <QDateTime>
+#include <QFile>
 
 #include "../Cataract/Cataract.h"
 
@@ -15,7 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setCentralWidget(ui->centralwidget);
     setWindowTitle("Cataract");
-    setStyleSheet("QLabel {}");
+
+    // using dark theme by default
+    setDarkTheme();
+
+    // not sure if I can do these connects from Qt Designer but the good old way seemed simpler
+    connect(ui->actionNative, SIGNAL(triggered()), this, SLOT(setNativeTheme()));
+    connect(ui->actionDark, SIGNAL(triggered()), this, SLOT(setDarkTheme()));
 }
 
 MainWindow::~MainWindow() {
@@ -64,5 +71,20 @@ void MainWindow::on_btnScan_clicked()
     }
 
     ui->txtOutput->append("<font color=\"grey\">--------------------------</font>");
+}
+
+void MainWindow::setNativeTheme() {
+    setStyleSheet("");
+}
+
+void MainWindow::setDarkTheme() {
+    QFile style(":/main/styles/main.qss");
+    if (style.open(QFile::ReadOnly)) {
+        QTextStream in(&style);
+        setStyleSheet(in.readAll());
+        style.close();
+    } else {
+        QMessageBox::warning(this, "file reading", "Failed to load style file. The program will use the default style.");
+    }
 }
 

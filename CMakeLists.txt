@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
         src/Cataract/tcpScanner.h
         src/Cataract/tcpScanner.cpp
         src/Cataract/Cataract.h
+        static/res.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

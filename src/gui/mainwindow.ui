@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -110,6 +113,11 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QTextEdit" name="txtOutput">
+          <property name="font">
+           <font>
+            <family>Monospace</family>
+           </font>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -144,7 +152,21 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuStyle">
+     <property name="title">
+      <string>Styles</string>
+     </property>
+     <addaction name="actionNative"/>
+     <addaction name="actionDark"/>
+    </widget>
+    <addaction name="menuStyle"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuView"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
@@ -162,6 +184,16 @@
     <string>Exit</string>
    </property>
   </action>
+  <action name="actionNative">
+   <property name="text">
+    <string>Native</string>
+   </property>
+  </action>
+  <action name="actionDark">
+   <property name="text">
+    <string>Dark Theme</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -176,8 +208,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>239</x>
-     <y>167</y>
+     <x>266</x>
+     <y>177</y>
     </hint>
    </hints>
   </connection>

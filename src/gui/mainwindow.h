@@ -17,6 +17,8 @@ public:
 
 private slots:
     void on_btnScan_clicked();
+    void setNativeTheme();
+    void setDarkTheme();
 
 private:
     Ui::MainWindow *ui;
