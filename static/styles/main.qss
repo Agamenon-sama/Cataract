@@ -8,7 +8,6 @@ QPushButton {
 }
 
 QLineEdit {
-	/*border: none;*/
 	border: 1px solid #263848;
 	border-radius: 17px;
 	padding: 7px;
@@ -19,8 +18,6 @@ QLineEdit {
 QCheckBox::indicator {
 	width:  15px;
 	height: 15px;
-	/*border: 1px solid #263848;
-	background: #212f3c;*/
 }
 QCheckBox::indicator:unchecked {
 	image: url(":/main/images/unchecked.png");
@@ -29,10 +26,37 @@ QCheckBox::indicator:checked {
 	image: url(":/main/images/checked.png");
 }
 
-/* Output text area */
-QTextEdit {
+/* ComboBox */
+QComboBox {
 	border: 1px solid #263848;
+	border-radius: 17px;
+	padding: 7px;
 	background: #212f3c;
+}
+
+QComboBox::drop-down {
+	background: transparent;
+	padding-right: 5px;
+}
+
+
+QComboBox::down-arrow {
+	image: url(":/main/images/down-arrow.png");
+	width:  10px;
+	height: 10px;
+}
+
+/*
+I have a weird white line at the top and bottom of the ListView
+probably caused by the padding.
+This is an attempt to fix it but it doesn't work for me. Maybe it's a bug from Qt.
+*/
+QComboBox QAbstractItemView {
+    background-color: #212f3c;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    outline: none;
 }
 
 /* Upper menu bar */
@@ -42,13 +66,14 @@ QMenuBar {
 
 /* Scrollbar */
 QScrollBar:vertical {
+	width: 12px;
 	border-radius: 5px;
-	background-color: #212f3c;
+	background-color: transparent;
 }
 QScrollBar::handle:vertical {
 	background-color: #1b252e;
-	width: 5px;
 	border-radius: 5px;
+	border: 1px solid #263848;
 }
 QScrollBar::add-line:vertical,
 QScrollBar::sub-line:vertical {
