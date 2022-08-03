@@ -61,5 +61,5 @@ uint16_t Cataract::servToPort(std::string service) {
         return ((struct sockaddr_in*)(addrsFound->ai_addr))->sin_port;
     }
 
-    return 80;
+    return 0;
 }

@@ -5,9 +5,6 @@
 #include <slog/slog.h>
 
 std::vector<std::string> splitLine(const std::string &line, const char sep) {
-    /** Takes a string, splits it into the strings separated by sep
-     * and return a vector with of the resulting strings
-     */
     std::vector<std::string> returnValue;
     std::string temp;
 
@@ -27,10 +24,6 @@ std::vector<std::string> splitLine(const std::string &line, const char sep) {
 }
 
 bool argToPorts(const std::string &portsArg, std::vector<uint16_t> &ports) {
-    /**
-     *  Takes the ports string and returns a vector of all the ports to scan
-     */
-    
     // ==================
     // determining ranges
     // ==================

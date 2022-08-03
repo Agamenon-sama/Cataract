@@ -11,6 +11,18 @@ A port scanner for Linux
 
 You want Qt Creator. Use Qt Creator to open the CMakeLists.txt file and build the project.
 
+## Documentation
+
+The software is documented using doxygen 1.9.1
+
+install doxygen then run
+
+```
+doxygen
+```
+
+You will find the generated documentation as a web page in doc/html and as latex in doc/latex
+
 ## Usage
 
 ### CLI

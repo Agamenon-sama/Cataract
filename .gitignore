@@ -6,3 +6,5 @@ CMakeLists.txt.user
 
 *.swp
 
+doc/html
+doc/latex
