@@ -5,11 +5,25 @@
 #include <string>
 #include <chrono>
 
+/**
+ * @brief simple logging library
+ * 
+ * @author Chams Eddine Hachani (agamenon) <chams.eddine.hachanii@gmail.com>
+ */
 namespace slog {
+    /**
+     * @brief color values of ascii escape codes
+     */
     enum class Decorator {
         Black = 30, Red, Green, Yellow, Blue, Magenta, Cyan, White, Default = 39
     };
 
+    /**
+     * @brief base logging class
+     * 
+     * This is class can be used as is or inherited from.
+     * It contains formatting properties and a functor to log the messages
+     */
     class Logger {
         public:
             Logger() {
@@ -19,11 +33,42 @@ namespace slog {
                 _outputFile = "stdout";
             }
         
+            /**
+             * @brief set a prefix to the log message
+             * 
+             * @param prefix the prefix to be prepended
+             */
             void setPrefix(std::string prefix) { _prefix = prefix; }
+            /**
+             * @brief set color of the text
+             * 
+             * @param decorator a Decorator value
+             */
             void setDecorator(Decorator decorator) { _decorator = decorator; }
+            /**
+             * @brief set whether to prepend the time of logging or not
+             * 
+             * @param val true if you want to set the time of logging. false otherwise
+             */
             void displayTime(bool val) { _displayTime = val; }
+            /**
+             * @brief set the stream or the name of the file to write to
+             * 
+             * @param filename the name of the stream or file
+             * 
+             * - if filename is set to "stdout", the message will be logged to stdout stream
+             * - if filename is set to "stderr", the message will be logged to stderr stream
+             * - if filename is set to something else, the message will be logged to a file with that name
+             * 
+             * @note if the message is printed to a file, no color formatting will be applied (because it's a text file duh)
+             */
             void setOutputFile(std::string filename) { _outputFile = filename; }
 
+            /**
+             * @brief logs the message
+             * 
+             * @param message message to be logged
+            */
             void operator()(std::string message) {
                 _print(_createPrintable(message));
             }
@@ -72,28 +117,46 @@ namespace slog {
             }
     };
 
+    /**
+     * @brief Error class
+     * 
+     * This class is a predefined error message configuration
+     * The message will be printed to stderr in red and with "Error: " as prefix
+     */
     class Error : public Logger {
         public:
             Error() : Logger() {
-                _prefix = "Error : ";
+                _prefix = "Error: ";
                 _decorator = Decorator::Red;
                 _outputFile = "stderr";
             }
     };
 
+    /**
+     * @brief Warning class
+     * 
+     * This class is a predefined warning message configuration
+     * The message will be printed to stderr in yellow and with "Warning: " as prefix
+     */
     class Warning : public Logger {
         public:
             Warning() : Logger() {
-                _prefix = "Warning : ";
+                _prefix = "Warning: ";
                 _decorator = Decorator::Yellow;
                 _outputFile = "stderr";
             }
     };
 
+    /**
+     * @brief Info class
+     * 
+     * This class is a predefined info message configuration
+     * The message will be printed to stdout in blue and with "Info: " as prefix
+     */
     class Info : public Logger {
         public:
             Info() : Logger() {
-                _prefix = "Info : ";
+                _prefix = "Info: ";
                 _decorator = Decorator::Blue;
             }
     };
