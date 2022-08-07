@@ -5,6 +5,8 @@
 #include <QDateTime>
 #include <QFile>
 
+#include <chrono>
+
 #include "../Cataract/Cataract.h"
 
 #include "../utils.h"
@@ -60,7 +62,9 @@ void MainWindow::on_btnScan_clicked()
     ui->txtOutput->append(QString("Scanning %1 (%2)").arg(addr.getAddr().c_str(), addr.getIp().c_str()));
     Cataract::TcpScanner scanner;
 
+    auto beginTimer = std::chrono::system_clock::now();
     auto results = scanner.portSweep(addr, ports);
+    auto endTimer = std::chrono::system_clock::now();
     for (const auto& result : results) {
         if (result.isOpen()) {
             ui->txtOutput->append(QString("The port %1/tcp is <font color=\"green\">open</font>").arg(result.getPort()));
@@ -69,6 +73,8 @@ void MainWindow::on_btnScan_clicked()
             ui->txtOutput->append(QString("The port %1/tcp is <font color=\"red\">closed</font>").arg(result.getPort()));
         }
     }
+    ui->txtOutput->append(QString("Scan duration: <font color=\"green\">%1ms</font>")
+                          .arg(std::chrono::duration_cast<std::chrono::milliseconds>(endTimer - beginTimer).count()));
 
     ui->txtOutput->append("<font color=\"grey\">--------------------------</font>");
 }
