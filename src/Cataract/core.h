@@ -53,7 +53,7 @@ namespace Cataract {
      */
     class ScanResult {
         public:
-        ScanResult();
+        ScanResult() = default;
         ScanResult(const IPAddress addr, const uint16_t port, const ScanStatus status);
 
         ScanStatus getStatus() const { return _status; }

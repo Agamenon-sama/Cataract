@@ -12,22 +12,60 @@ Cataract::ScanResult Cataract::TcpScanner::singleScan(const IPAddress addr, cons
     }
 
     // Making socket
-    int sock = socket(addr.getHints().ai_family, SOCK_STREAM, 0);
+    int sock = socket(addr.getHints().ai_family, SOCK_STREAM | SOCK_NONBLOCK, 0);
     if(sock == -1) {
         return ScanResult(addr, port, ScanStatus::SocketFailed);
     }
 
+    // Prepare select stuff
+    fd_set fdWrite;
+    FD_ZERO(&fdWrite); // init the fieldset
+    FD_SET(sock, &fdWrite);
+    struct timeval timeout {
+        .tv_sec = 3,
+        .tv_usec = 0
+    };
+
     // Connecting
+    ScanResult result;
     // Here I am assuming only 1 address is returned
-    int ret = connect(sock, addrsFound->ai_addr, addrsFound->ai_addrlen);
-    freeaddrinfo(addrsFound);
-    if(!ret) {
-        close(sock);
-        return ScanResult(addr, port, ScanStatus::Open); // port open
-    } else {
-        close(sock);
-        return ScanResult(addr, port, ScanStatus::Closed); // port closed
+    connect(sock, addrsFound->ai_addr, addrsFound->ai_addrlen);
+
+    int selectRet = select(sock + 1, nullptr, &fdWrite, nullptr, &timeout);
+    if (selectRet == -1) { // can't connect
+        result = ScanResult(addr, port, ScanStatus::Closed); // todo: implement unexpected error
     }
+    else if (selectRet == 0) { // timeout
+        result = ScanResult(addr, port, ScanStatus::Closed); // todo: implement a timeout status
+    } else {
+        if (FD_ISSET(sock, &fdWrite)) {
+            int sockOptError;
+            socklen_t len = sizeof(sockOptError);
+
+            getsockopt(sock, SOL_SOCKET, SO_ERROR, &sockOptError, &len);
+            if (sockOptError) {
+                result = ScanResult(addr, port, ScanStatus::Closed); // port closed
+            }
+            else {
+                result = ScanResult(addr, port, ScanStatus::Open); // port open
+            }
+        }
+        else {
+            // todo: implement unexpected error
+            result = ScanResult(addr, port, ScanStatus::Closed);
+        }
+    }
+
+    freeaddrinfo(addrsFound);
+    close(sock);
+    return result;
+    // if(!ret) {
+    //     close(sock);
+    //     return ScanResult(addr, port, ScanStatus::Open); // port open
+    // } else {
+    //     close(sock);
+    //     return ScanResult(addr, port, ScanStatus::Closed); // port closed
+    // }
 }
 
 std::vector<Cataract::ScanResult> Cataract::TcpScanner::portSweep(const IPAddress addr, const std::vector<uint16_t> ports) const {
