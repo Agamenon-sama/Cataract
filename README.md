@@ -2,6 +2,8 @@
 
 A port scanner for Linux
 
+![screenshot](screenshot.png)
+
 ## Dependencies
 
 - Posix sockets
