@@ -31,7 +31,8 @@ QVariant ScanResultModel::data(const QModelIndex &index, int role) const {
         case 1:
             return QString("%1").arg(_scanResults[index.row()].getPort());
         case 2:
-            return QString("%1").arg((uint32_t) _scanResults[index.row()].getStatus());
+            return QString("%1")
+                    .arg(QString::fromStdString(Cataract::scanStatusToString(_scanResults[index.row()].getStatus())));
         }
     }
     return QVariant();

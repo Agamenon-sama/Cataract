@@ -63,3 +63,14 @@ uint16_t Cataract::servToPort(std::string service) {
 
     return 0;
 }
+
+std::string Cataract::scanStatusToString(const ScanStatus status) {
+    switch (status) {
+        case ScanStatus::Open: return "Open";
+        case ScanStatus::Closed: return "Closed";
+        case ScanStatus::SocketFailed: return "Socket Failed";
+        case ScanStatus::AddressNotFound: return "Address Not Found";
+
+        default: return "Unknown result";
+    }
+}

@@ -74,4 +74,6 @@ namespace Cataract {
      * @return on success returns the port number of the service else it returns 0
      */
     uint16_t servToPort(std::string service);
+
+    std::string scanStatusToString(const ScanStatus status);
 }
