@@ -24,6 +24,8 @@ set(PROJECT_SOURCES
         src/gui/mainwindow.cpp
         src/gui/mainwindow.h
         src/gui/mainwindow.ui
+        src/gui/scanresultmodel.cpp
+        src/gui/scanresultmodel.h
         src/Cataract/core.h
         src/Cataract/core.cpp
         src/Cataract/tcpScanner.h

@@ -22,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent)
     // using dark theme by default
     setDarkTheme();
 
+    // set model for the table of results
+    _resultsModel = new ScanResultModel(nullptr);
+    ui->tableResults->setModel(_resultsModel);
+
     // not sure if I can do these connects from Qt Designer but the good old way seemed simpler
     connect(ui->actionNative, SIGNAL(triggered()), this, SLOT(setNativeTheme()));
     connect(ui->actionDark, SIGNAL(triggered()), this, SLOT(setDarkTheme()));
@@ -29,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {
     delete ui;
+    delete _resultsModel;
 }
 
 
@@ -65,6 +70,9 @@ void MainWindow::on_btnScan_clicked()
     auto beginTimer = std::chrono::system_clock::now();
     auto results = scanner.portSweep(addr, ports);
     auto endTimer = std::chrono::system_clock::now();
+
+    _resultsModel->setResults(results);
+
     for (const auto& result : results) {
         if (result.isOpen()) {
             ui->txtOutput->append(QString("The port %1/tcp is <font color=\"green\">open</font>").arg(result.getPort()));

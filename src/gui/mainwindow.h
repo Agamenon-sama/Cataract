@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "scanresultmodel.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -36,5 +38,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui; ///< @brief contains the widgets
+    ScanResultModel *_resultsModel;
 };
 #endif // MAINWINDOW_H
