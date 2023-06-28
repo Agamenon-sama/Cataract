@@ -75,5 +75,11 @@ namespace Cataract {
      */
     uint16_t servToPort(std::string service);
 
+    /**
+     * @brief return a textual representation from a ScanStatus
+     *
+     * @param status ScanStatus value to transform
+     * @return textual representation of the input
+    */
     std::string scanStatusToString(const ScanStatus status);
 }

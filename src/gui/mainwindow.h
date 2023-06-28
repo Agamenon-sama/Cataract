@@ -38,6 +38,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui; ///< @brief contains the widgets
-    ScanResultModel *_resultsModel;
+    ScanResultModel *_resultsModel; ///< @brief data representation of the scan results for the view
 };
 #endif // MAINWINDOW_H
